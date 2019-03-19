@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
-import subprocess;
 import sys;
 import os;
 import glob;
 
+# Needs Python 3.5 >= because of subprocess
 if(sys.version_info < (3, 5)):
 	print("This script requires python 3.5 or later. Aborting...");
 	sys.exit();
+
+import subprocess;
 
 if(os.getuid() != 0):
 	print("Please run this script with sudo. Aborting...");
@@ -19,7 +21,7 @@ except:
 	print("Failed to get where gcc is located. Aborting...");
 	sys.exit();
 	
-
+# If you wanna add more compilers, just add the default name here.
 compilers = ["gcc", "gcc-ar", "gcc-nm", "gcc-ranlib", "g++", "gcov", "gcov-dump", "gcov-tool"];
 
 for compiler in compilers:
@@ -28,7 +30,7 @@ for compiler in compilers:
 	if not compiler_dir:
 		print("Couldn't find any " + compiler + " alternatives.");
 		continue;
-	# update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7
+	
 	try:
 		for c in compiler_dir:
 			print("Installing " + c + " alternative for " + compiler + " with priority " + c[-1]);
