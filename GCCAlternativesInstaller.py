@@ -22,7 +22,7 @@ except:
 	sys.exit();
 	
 # If you wanna add more compilers, just add the default name here.
-compilers = ["gcc", "gcc-ar", "gcc-nm", "gcc-ranlib", "g++", "gcov", "gcov-dump", "gcov-tool"];
+compilers = ["gcc", "gcc-ar", "gcc-nm", "gcc-ranlib", "g++", "gcov", "gcov-dump", "gcov-tool", "cpp"];
 
 for compiler in compilers:
 	compiler_dir = glob.glob(bin_dir + "/" + compiler + "-[0-99]*");
