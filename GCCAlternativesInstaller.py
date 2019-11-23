@@ -4,9 +4,9 @@ import sys;
 import os;
 import glob;
 
-# Needs Python 3.5 >= because of subprocess
-if(sys.version_info < (3, 5)):
-	print("This script requires python 3.5 or later. Aborting...");
+# Needs Python 3.7 >= for subprocess capture_output
+if(sys.version_info < (3, 7)):
+	print("This script requires python 3.7 or later. Aborting...");
 	sys.exit();
 
 import subprocess;
@@ -20,9 +20,16 @@ try:
 except:
 	print("Failed to get where gcc is located. Aborting...");
 	sys.exit();
+
+try:
+	prefix_out = subprocess.run(['gcc', '-v'], capture_output=True).stderr.decode('utf-8').split();
+	prefix = list(filter(lambda s : '--program-prefix' in s, prefix_out))[0].split('=')[1];
+except:
+	print("Failed while getting prefix. Aborting...");
+	sys.exit();
 	
-# If you wanna add more compilers, just add the default name here.
-compilers = ["gcc", "gcc-ar", "gcc-nm", "gcc-ranlib", "g++", "gcov", "gcov-dump", "gcov-tool", "cpp"];
+# If you wanna add more compilers, just add the default name here. x86_64-linux-gnu-
+compilers = ["gcc", "gcc-ar", "gcc-nm", "gcc-ranlib", "g++", "gcov", "gcov-dump", "gcov-tool", "cpp", prefix + "cpp", prefix + "gcc", prefix + "g++", prefix + "gcc-ar", prefix + "gcc-nm", prefix + "gcc-ranlib", prefix + "gcov", prefix + "gcov-dump", prefix + "gcov-tool"];
 
 for compiler in compilers:
 	compiler_dir = glob.glob(bin_dir + "/" + compiler + "-[0-99]*");
